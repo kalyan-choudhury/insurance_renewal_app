@@ -104,19 +104,20 @@ if uploaded_file:
         else:
             prob = preds
 
-        output = pd.DataFrame({
-            "Predicted_Renewal": preds,
-            "Renewal_Probability": prob
-        })
+        # Combine original input and predictions
+        results = data.copy()
+        results["Predicted_Renewal"] = preds
+        results["Renewal_Probability"] = prob
 
-        st.subheader("🔮 Predictions")
-        st.dataframe(output.head())
+        st.subheader("🔮 Predictions with Input Data")
+        st.dataframe(results.head())
 
         st.download_button(
             label="📥 Download Predictions as CSV",
-            data=output.to_csv(index=False),
+            data=results.to_csv(index=False),
             file_name="predictions.csv"
         )
+
 
     except Exception as e:
         st.error(f"⚠️ Error during processing: {e}")
